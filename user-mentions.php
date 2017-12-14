@@ -82,18 +82,26 @@ function um_user_notification($comment) {
 		$blogname = get_option('blogname');
 		$comment_link = get_comment_link($comment->comment_ID);
 
-		foreach($matches[1] as $tag) {
-			if($user = get_user_by('login', $tag)) {
+		foreach($matches[1] as $tag)
+			if($user = get_user_by('login', $tag))
 				if(!in_array($user, $sent)) {
-					if(wp_mail(
-						$user->user_email, 
-						sprintf(__('[%s] %s mentioned you in a comment', 'user-mentions'), $blogname, $comment->comment_author),
-						$comment->comment_content ."<p>". __('Click here to view/reply: ', 'user-mentions') ."<a href='{$comment_link}'>{$comment_link}</a></p>"
-					)) $sent[] = $user;
+					ob_start();
+			        require um_user_notification_template();
+			        $body = ob_get_clean();
+					$subject = sprintf(__('[%s] %s mentioned you in a comment', 'user-mentions'), $blogname, $comment->comment_author);
+
+					if(wp_mail($user->user_email, $subject, $body))
+						$sent[] = $user;
 				}
-			}
-		}
 	}
+}
+
+function um_user_notification_template() {
+    $template_path = locate_template('templates/user-mentions/notification.php');
+
+    if($template_path) return $template_path; 
+
+    return __DIR__ . '/templates/user-mentions/notification.php';
 }
 
 
