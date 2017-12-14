@@ -88,7 +88,7 @@ function um_user_notification($comment) {
 					ob_start();
 			        require um_user_notification_template();
 			        $body = ob_get_clean();
-					$subject = sprintf(__('[%s] %s mentioned you in a comment', 'user-mentions'), $blogname, $comment->comment_author);
+					$subject = isset($subject) ? $subject : sprintf(__('[%s] %s mentioned you in a comment', 'user-mentions'), $blogname, $comment->comment_author);
 
 					if(wp_mail($user->user_email, $subject, $body))
 						$sent[] = $user;
