@@ -22,7 +22,6 @@ function um_scripts() {
 
 add_action('wp_enqueue_scripts', 'um_scripts');
 
-
 function um_inline_styles() {
 	if(comments()):
 		echo "
@@ -61,14 +60,14 @@ add_filter('preprocess_comment', 'um_add_tags_to_comment');
 
 
 function um_notify_tagged_user_unmoderated($comment_ID, $comment_approved) {
-	if($comment_approved)
+	if($comment_approved) 
 		um_user_notification(get_comment($comment_ID));
 }
 
 add_action('comment_post', 'um_notify_tagged_user_unmoderated', 10, 2);
 
 function um_notify_tagged_user_moderated($new_status, $old_status, $comment) {
-	if($old_status !== $new_status && $new_status == 'approved')
+	if($old_status !== $new_status && $new_status == 'approved') 
 		um_user_notification($comment);
 }
 
@@ -97,11 +96,12 @@ function um_user_notification($comment) {
 }
 
 function um_user_notification_template() {
-    $template_path = locate_template('templates/user-mentions/notification.php');
+	$default_path = 'templates/user-mentions/notification.php';
+    $template_path = locate_template($default_path);
 
     if($template_path) return $template_path; 
 
-    return __DIR__ . '/templates/user-mentions/notification.php';
+    return __DIR__ . $default_path;
 }
 
 
