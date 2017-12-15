@@ -101,7 +101,7 @@ function um_user_notification_template() {
 
     if($template_path) return $template_path; 
 
-    return __DIR__ . $default_path;
+    return __DIR__ . "/$default_path";
 }
 
 
